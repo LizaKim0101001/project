@@ -1,0 +1,20 @@
+.profile{
+    width: 100%;
+    padding: 20px;
+    @include flex(flex, row, space-between, flex-start, no-wrap);
+    box-sizing: border-box;
+    &_avatar{
+        width: 186px;
+        height: 186px;
+        margin-bottom: 125px;
+    }
+    &-tasks{
+        width: 72.5%;
+    }
+    &_title{
+        @include font("Roboto", 16px, 19px, 400, $label-text);
+    }
+    &_text{
+        @include font("Roboto", 16px, 19px, 400, $text);
+    }
+}

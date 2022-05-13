@@ -1,0 +1,32 @@
+.popup{
+    display: none;
+    position: absolute;
+    padding: 5px;
+    width: 136px;
+    z-index: 2;
+    top: 40px;
+    border: 1px solid $primary;
+    box-shadow: 0px 0px 2px 2px rgba(123, 97, 255, 0.5);
+    border-radius: 5px;
+    background-color: $white;
+    &-item{
+        margin-bottom: 2px;
+        @include font("Inter", 12px, 14px, 400, $text);
+        border: none;
+        background-color: $white;
+        
+        &_er{
+            color: $error;
+        }
+    }
+    &-active{
+        display: block;
+    }
+}
+.edit-popup{
+    z-index: 2;
+    width: 105px;
+    top: 45px;
+    right: 30px;
+    
+}

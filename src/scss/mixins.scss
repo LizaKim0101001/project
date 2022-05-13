@@ -1,0 +1,36 @@
+$text: #333333;
+$disabled-text: #F4F4F4;
+$label-text: #CCCCCC;
+$inner-shadow: #B5B5B5;
+$primary: #7B61FF;
+$success: #5EE48C;
+$error: #FF6161;
+$white: #ffffffff;
+
+@mixin font ($family, $size: 16px, $height: 19px, $weight, $color){
+    font-family: $family;
+    font-size: $size;
+    line-height: $height;
+    font-weight: $weight;
+    color: $color;
+}
+
+@mixin flex ( $display, $direction, $justify, $align, $wrap) {
+
+    display: $display;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $align;
+    flex-wrap: $wrap;
+}
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    border: 0;
+    padding: 0;
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+  }

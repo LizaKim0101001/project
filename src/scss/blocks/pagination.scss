@@ -1,0 +1,19 @@
+.pagination{
+    display: flex;
+    width: 100%;
+    &_button{
+        width: 234px;
+        height: 24px;
+        @include flex(flex, row, space-between, center, no-wrap);
+    }
+    &_item{
+        padding: 2.5px 7.5px;
+        &__next{
+            padding: 2.5px 10px;
+        }
+    }
+    &_shown{
+        width: 140px;
+        @include font("Roboto", 14px, 16px, 400, $inner-shadow);
+    }
+}

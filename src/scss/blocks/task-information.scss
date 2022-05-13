@@ -1,0 +1,67 @@
+@import "../mixins.scss";
+.task{
+    &-information{
+        width: 100%;
+        max-width: 1280px;
+        box-sizing: border-box;
+        padding: 20px;
+        box-shadow: 0px 0px 5px 3px #B5B5B5;
+        border-radius: 5px;
+        height: auto;
+        @include flex(flex, row, space-between, flex-start, no-wrap);
+        &_divide{
+            width: 1px;
+            background-color: $inner-shadow;
+            margin: 0 20px 0 20px;
+            min-height: 602px;
+        }
+        &_title{
+            margin-bottom: 5px;
+            @include font("Roboto", 16px, 19px, 400, $label-text);
+        }
+        &_text{
+            @include font("Roboto", 16px, 19px, 400, $text);
+        }
+    }
+    &-about{
+        width: 300px;
+        &_item{
+            margin-bottom: 20px;
+            &:last-of-type{
+                margin-bottom: 5px;
+            }
+        }
+        &_button{
+            width: 228px;
+            height: 24px;
+        }
+    }
+    &-description{
+        width: 400px;
+    }
+    &-comment{
+        width: 458px;
+        &-form{
+            margin-bottom: 20px;
+            @include flex (flex, column, flex-start, flex-start, no-wrap);
+        }
+        &_input{
+            width: 100%;
+            max-width: 458px;
+            height: 76px;
+            overflow: scroll;
+            margin-bottom: 10px;
+            &::placeholder{
+                padding: 5px 10px;
+                @include font("Roboto", 16px, 19px, 400, $label-text);
+            }
+        }
+        &_item{
+            margin-bottom: 20px;
+        }
+        &_button{
+            width: 221px;
+            height: 24px;
+        }
+    }
+}

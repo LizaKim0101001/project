@@ -1,0 +1,80 @@
+@import "./blocks/header.scss";
+@import "./blocks/input-button.scss";
+@import "./blocks/board.scss";
+@import "./blocks/card-header.scss";
+@import "./blocks/task-list.scss";
+@import "./blocks/authorize.scss";
+@import "./blocks/popup.scss";
+@import "./blocks/pagination.scss";
+@import "./blocks/task-information.scss";
+@import "./blocks/notion-work.scss";
+@import "./blocks/task-edit.scss";
+@import "./blocks/user-list.scss";
+@import "./blocks/profile.scss";
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto";
+    font-size: 16px;
+    line-height: 19px;
+    font-weight: 400;
+    font-style: normal;
+    list-style: none;
+}
+.erase{
+    text-decoration: none;
+    width: 100%;
+}
+.link {
+    text-decoration: none;
+    margin-right: 10px;
+    &:last-of-type{
+        margin-right: 0;
+    }
+}
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    border: 0;
+    padding: 0;
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+  }
+@font-face {
+    font-family: "Inter";
+    src: local("Inter-Regular"),
+    url("../fonts/Inter-Regular.woff") format("woff"),
+    url("../fonts/Inter-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Open Sans";
+    src: local("OpenSans-Regular"),
+    url("../fonts/OpenSans-Regular.woff") format("woff"),
+    url("../fonts/OpenSans-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: local("Roboto-Regular"),
+    url("../fonts/Roboto-Regular.woff") format("woff"),
+    url("../fonts/Roboto-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Roboto";
+    src: local("Roboto-Light"),
+    url("../fonts/Roboto-Light.woff") format("woff"),
+    url("../fonts/Roboto-Light.woff2") format("woff2");
+    font-weight: 300;
+    font-style: normal;
+}

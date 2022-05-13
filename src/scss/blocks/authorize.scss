@@ -1,0 +1,39 @@
+.authorize .button{
+    width: 240px;
+    height: 24px;
+}
+.task-list .button{
+    width: 125px;
+    height: 24px;
+}
+.authorize .input{
+    width: 240px;
+    height: 24px;
+    padding: 5px 10px;
+    margin-bottom: 20px;
+}
+.authorize{
+    position: relative;
+    top: 197px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+
+    &_form{
+        @include flex( flex, row, normal, center, wrap);
+        width: 240px;
+    }
+    &_title{
+        @include font('Roboto', 24px, 28px, 300, $text);
+        margin-bottom: 30px;
+    }
+    &-wrapper{
+        width: 300px;
+        height: 288px;
+        padding: 30px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 5px 3px $inner-shadow;
+        @include flex( flex, column, center, center, wrap);
+    }
+}
