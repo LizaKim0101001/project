@@ -1,4 +1,13 @@
-.task-edit_select{
-    width: 300px;
-    
+.task-edit{
+    &_input{
+    width: 100%;
+    padding: 5px 10px;
+    margin-bottom: 20px;
+    }
+    &_textarea{
+        width: 100%;
+        height: 528px;
+        padding: 5px 10px;
+        resize: none;
+    }
 }

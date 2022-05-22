@@ -22,16 +22,11 @@
 }
 .navigation{
     list-style: none;
-    width: 262px;
     @include flex(flex, row, center, center, wrap);
 
     &_item{
-        margin-left: 10px;
+        margin-right: 10px;
         @include font("Open Sans", 24px, 33px, 400, $text);
-
-        &:first-child{
-            margin-left: 0px;
-        }
     }
     &_item.active{
         box-sizing: border-box;

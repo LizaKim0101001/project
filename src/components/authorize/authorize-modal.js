@@ -1,10 +1,10 @@
 import React from "react";
 import {useState} from "react";
-import { tasks } from "../../store/index";
+import { users } from "../../store/users";
 import {observer} from "mobx-react";
-import {Link} from "react-router-dom";
 import { AppLinks } from "../../const";
-
+import { useNavigate } from "react-router-dom";
+import _ from "lodash";
 const AuthorizeModal= observer(()=> {
     const [form, setForm] = useState({
         login:"",
@@ -15,13 +15,26 @@ const AuthorizeModal= observer(()=> {
         const {id, value} = evt.target;
         setForm({...form, [id]:value})
     }
-
-    const handlerSubmit = (evt)=>{
-        evt.preventDefault()
-        tasks.postLogin = form
-        console.log(tasks.postLogin);
+    const handlerOpen =(e)=>{
+        e.preventDefault();
+        const popup = document.querySelector(".popup");
+        popup.classList.toggle("popup-authorize-active")
     }
+    
+    let navigate = useNavigate()
+    console.log();
+    const handlerSubmit = async (evt)=>{
+        await evt.preventDefault()
+        if (_.isEqual(form, users.userLoginData)) {
+            await users.login(users.userLoginData)
+            navigate(`${AppLinks.TASKLIST}`)
+        }
+        if (!_.isEqual(form, users.userLoginData)) {
+            const popup = document.querySelector(".popup");
+            popup.classList.toggle("popup-authorize-active")
 
+        }
+    }
     return(
         <>
         <section className="authorize">
@@ -32,9 +45,13 @@ const AuthorizeModal= observer(()=> {
                     <input type="text" id="login" className="input" placeholder="username@e.mail" onChange={handlerLogin}/>
                     <label htmlFor="password" className="label">Пароль</label>
                     <input type="password" id="password" className="input" placeholder="********" onChange={handlerLogin}/>
-                    <Link to={AppLinks.TASKLIST}><button type="submit" className="button">Вход</button></Link>
+                    <button type="submit" className="button">Вход</button>
                 </form>
             </div>
+        </section>
+        <section className="popup popup-authorize">
+                <h3 className="popup-authorize_title">Неправильно введены данные</h3>
+                <button className="button" onClick={handlerOpen}>Закрыть окно</button>
         </section>
         </>
     )

@@ -11,9 +11,9 @@
         @include flex(flex, row, space-between, flex-start, no-wrap);
         &_divide{
             width: 1px;
-            background-color: $inner-shadow;
-            margin: 0 20px 0 20px;
+            
             min-height: 602px;
+            height: 100%;
         }
         &_title{
             margin-bottom: 5px;
@@ -22,9 +22,14 @@
         &_text{
             @include font("Roboto", 16px, 19px, 400, $text);
         }
+        &_delete{
+            color: $error;
+        }
     }
     &-about{
+        box-sizing: border-box;
         width: 300px;
+        padding-right: 20px;
         &_item{
             margin-bottom: 20px;
             &:last-of-type{
@@ -37,9 +42,17 @@
         }
     }
     &-description{
-        width: 400px;
+        min-height: 602px;
+        width: 400px;        
+        border-right: 1px solid $inner-shadow;
+        border-left: 1px solid $inner-shadow;
+        padding-right: 20px;
+        box-sizing: border-box;
+        padding-left: 20px;
     }
     &-comment{
+        padding-left: 20px;
+        box-sizing: border-box;
         width: 458px;
         &-form{
             margin-bottom: 20px;
@@ -58,6 +71,7 @@
         }
         &_item{
             margin-bottom: 20px;
+            @include flex (flex, row, space-between, flex-start, no-wrap);
         }
         &_button{
             width: 221px;

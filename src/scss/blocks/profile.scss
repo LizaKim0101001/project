@@ -4,9 +4,12 @@
     @include flex(flex, row, space-between, flex-start, no-wrap);
     box-sizing: border-box;
     &_avatar{
+        border-radius: 50%;
         width: 186px;
         height: 186px;
         margin-bottom: 125px;
+        background-position: center;
+        background-repeat: no-repeat;
     }
     &-tasks{
         width: 72.5%;

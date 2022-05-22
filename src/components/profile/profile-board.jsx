@@ -1,87 +1,112 @@
 import React from "react";
+import { tasks } from "../../store/tasks";
+import { users } from "../../store/users";
 import Pagination from "../pagination/pagination";
+import TaskItem from "../task-item/task-item";
+import {observer} from "mobx-react";
 
-export default function ProfileBoard() {
+const ProfileBoard = observer(()=> {
+    
+    // для заполнения полей о пользователе
+    const {about, id, photoUrl, username} = users.oneUser
+    let aboutArray
+    if (about === null || about === undefined) {
+        aboutArray = []
+    } else{
+        aboutArray = about.split(" ")
+    }
+    const handleEditProfile = (evt)=>{
+        const {id, value} = evt.target
+        users.editProfile[id] = value
+    }
+    //для заполнения полей задач пользователя
+    const {filterData} = tasks
 
+
+    //управления модальным окном
     const handlerCloseModal = (e)=>{
         e.preventDefault()
         const modal = document.querySelector(".notion-work")
         modal.classList.toggle("notion-work_show");
     }
+    function examination() {
+        if (users.editProfile.about === "") {
+            users.editProfile.about = users.userData.about
+        }
+        if (users.editProfile.photoUrl === "") {
+            users.editProfile.photoUrl = users.userData.photoUrl
+        }
+        if (users.editProfile.login === "") {
+            users.editProfile.login = users.userData.login
+        }
+    }
+    async function editProfile (e){
+        e.preventDefault()
+        const modal = document.querySelector(".notion-work")
+        modal.classList.toggle("notion-work_show");
+        users.editProfile.id = users.userData.id
+        users.editProfile.login = users.userData.login
+        users.editProfile.password = "123"
+        await examination();
+        await users.editUsers(users.editProfile);
+        await users.getOneUserData(id)
+        await users.users()
+    }
     return(
         <>
         <section className="profile">
             <div className="task-about">
-                <img src="" alt="" className="profile_avatar" />
+                <img src={photoUrl} alt="" className="profile_avatar" />
                 <ul className="profile_user-about">
                     <li className="profile_title">
-                        куфд
+                        О себе
                     </li>
-                    <li className="profile_text">
-                        куфд
-                    </li>
-                    <li className="profile_text">
-                        куфд
-                    </li>
-                    <li className="profile_text">
-                        куфд
-                    </li>
+                    {(aboutArray &&
+                        aboutArray.map(aboutArray=> <li key={aboutArray} className="profile_text">{aboutArray}</li>))}
                 </ul>
             </div>
             <p className="task-information_divide"></p>
             <div className="profile-tasks">
                 <p className="profile_title">Задачи</p>
                 <table className="table">
-                    <tr className="task-list_list">
-                        <td className="task-list_item type">
-                            <p className="table-cell type-error"></p></td>
-                        <td className="task-list_item name-task">
-                            <p className="table-cell">2</p></td>
-                        <td className="task-list_item status">
-                            <button className="table-cell status-button status-error">Открыто</button></td>
-                        <td className="task-list_item priority">
-                            <p className="table-cell proirity-hight">Высокий</p></td>
-                    </tr>
-                    <tr className="task-list_list">
-                        <td className="task-list_item type">
-                            <p className="table-cell type-error"></p></td>
-                        <td className="task-list_item name-task">
-                            <p className="table-cell">2</p></td>
-                        <td className="task-list_item status">
-                            <button className="table-cell status-button status-error">Открыто</button></td>
-                        <td className="task-list_item priority">
-                            <p className="table-cell proirity-hight">Высокий</p></td>
-                    </tr>
+                    <tbody>
+                    {(filterData.data &&
+                        filterData.data.map(filterData=> <TaskItem id={filterData.id} title={filterData.title} status={filterData.status} type={filterData.type} rank={filterData.rank} assignedId={filterData.assignedId}/>)
+                    )} 
+                    </tbody>
                 </table>
                 <Pagination></Pagination>
             </div>
-            <section className="notion-work notion-work_show">
+            </section>
+            <section className="notion-work">
             <div className="notion-work_wrapper">
                 <h3 className="notion-work_title">Редактирование пользователя</h3>
                 <form action="" className="notion-work_form">
                     <ul className="notion-work_list">
                         <li className="notion-work_item">
-                            <label className="task-information_title" htmlFor="new-name">Имя пользователя</label>
-                            <input className="notion-work_input input" id="new-name" type="text" placeholder="Введите имя"/>
+                            <label className="task-information_title" htmlFor="username">Имя пользователя</label>
+                            <input className="notion-work_input input" id="username" type="text" defaultValue={username} onChange={handleEditProfile}/>
                         </li>
                         <li className="notion-work_item">
-                            <label htmlFor="new-avatar" className="task-information_title">URL фотографии</label>
-                            <input id="new-avatar" className="notion-work_input input" alt="avatar" type="text" placeholder="URL фотографии"/>
+                            <label htmlFor="photoUrl" className="task-information_title">URL фотографии</label>
+                            <input id="photoUrl" className="notion-work_input input" alt="avatar" type="text" placeholder="URL фотографии" onChange={handleEditProfile}/>
                         </li>
                         <li className="notion-work_item">
-                            <label htmlFor="about-me" className="task-information_title">Комментарий</label>
-                            <textarea id="about-me" className="input task-comment_input" placeholder="placehoder"></textarea>
+                            <label htmlFor="about" className="task-information_title">Комментарий</label>
+                            <textarea id="about" className="input task-comment_input" defaultValue={about} onChange={handleEditProfile}></textarea>
                         </li>
                     </ul>
                 </form>
                 <div className="buttons-wrapper">
-                    <button type="submit" className="button button_primary notion-work_button">Добавить</button>
+                    <button type="submit" className="button button_primary notion-work_button" onClick={editProfile}>Добавить</button>
                     <button type="reset" onClick={handlerCloseModal} className="button notion-work_button">Отмена</button>
                 </div>
             </div>
-        </section>
+            </section>
 
-        </section>
+        
         </>
     );
-}
+})
+
+export default  ProfileBoard

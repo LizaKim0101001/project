@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import {AppLinks} from "../../const.js";
 import {observer} from "mobx-react";
-import { tasks } from "../../store/index.js";
+import { users } from "../../store/users.js";
 
 function UserItem({username, id}) {
     let navigate = useNavigate()
@@ -10,8 +10,8 @@ function UserItem({username, id}) {
         navigate(`${AppLinks.PROFILE}${id}`)
     }
     return(
-        <tr className="task-list_list" onClick={handlerProfile}>
-            <td className="task-list_item">
+        <tr className="table_list" onClick={handlerProfile}>
+            <td className="table_item">
                 <p className="table-cell">{username}</p>
             </td>
         </tr>
@@ -19,7 +19,7 @@ function UserItem({username, id}) {
 }
 
 const UserList = observer(()=> {
-    const {filterUsers} = tasks
+    const {filterUsers} = users
     return(
         <section className="user-list">
             <table className="table">

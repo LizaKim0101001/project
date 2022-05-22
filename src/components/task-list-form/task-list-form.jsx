@@ -1,12 +1,16 @@
+import { observer } from "mobx-react-lite";
 import React from "react";
-import {tasks} from "../../store/index.js" 
+import {tasks} from "../../store/tasks";
+import { users } from "../../store/users.js";
 //import {useState} from "react";
 
-export default function TaskListForm() {
+const TaskListForm = observer(()=> {
+
 const handlerShow=(e)=>{
     e.preventDefault()
     e.target.parentElement.classList.toggle("show");
 }
+
 const form = {
     filter: {
       query: "",
@@ -61,13 +65,19 @@ const handlerQuery = (evt)=>{
 }
 const handlerSubmit = (e)=>{
     e.preventDefault()
-    tasks.filter = form
-    tasks.getFilterTasks(tasks.filter)
+    console.log(form);
+    tasks.taskFilter = form
+    tasks.filterTasks(tasks.taskFilter)
 }
+const handlerUser = (e)=>{
+    const {id} = e.target
+    form.filter.assignedUsers.push(`${id}`)
+}
+const {allUsers} = users
     return(
         <>
         <section className="task-list">
-            <form action="" onSubmit={handlerSubmit} >
+            <form action="" onSubmit={handlerSubmit} className="form-task-list">
                 <ul className="task-list_list">
                     <li className="task-list_item type">
                         <button className="dropdown_btn" onClick={handlerShow}>
@@ -92,14 +102,10 @@ const handlerSubmit = (e)=>{
                             Пользователь
                         </button>
                         <ul className="dropdown_content">
-                            <li  className="dropdown_item">
-                                <input type="checkbox" name="" id="user1" className="dropdown_checkbox" />
-                                <label htmlFor="user1" className="dropdown_label">User1</label>
-                            </li>
-                            <li  className="dropdown_item">
-                                <input type="checkbox" name="" id="user2" className="dropdown_checkbox" />
-                                <label htmlFor="user2" className="dropdown_label"> User2</label>
-                            </li>
+                            {(allUsers.map(allUsers=><li  className="dropdown_item">
+                                <input type="checkbox" name="" id={allUsers.id} className="dropdown_checkbox" onChange={handlerUser}/>
+                                <label htmlFor={allUsers.id} className="dropdown_label">{allUsers.username}</label>
+                            </li>))}
                         </ul>
                     </li>
                     <li className="task-list_item status">
@@ -152,4 +158,9 @@ const handlerSubmit = (e)=>{
         </section>
         </>
     )
-}
+})
+
+export default TaskListForm
+
+/*
+                            */

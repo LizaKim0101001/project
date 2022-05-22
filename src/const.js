@@ -5,5 +5,6 @@ export const AppLinks = {
     TASK: "/task/",
     TASKEDIT: "/task-edit/",
     USERS: "/users",
+    TASKADD: "/task-edit",
 
 }

@@ -1,0 +1,150 @@
+.table{
+    width: 100%;
+    min-height: 684px;
+    height: 100%;
+    box-shadow: inset 0px 0px 2px 1px #B5B5B5;
+    border-radius: 5px;
+    background-color: $white;
+    position: relative;
+    z-index: 2;
+    box-sizing: border-box;
+    &-wrapper{
+        width: 100%;
+    }
+    &-cell{
+        height: 19px;
+        padding-right: 14px;
+        overflow: hidden;
+        box-sizing: border-box;
+        @include font("Roboto", 16px, 19px, 400, black);
+    }
+    &_list{
+        height: 68px;
+        @include flex(flex, row, space-between, flex-start, no-wrap);
+        padding: 0 30px;
+    }
+    &_list:nth-child(2n){
+        background-color: #F2F2F2;
+    }
+    &_item{
+        display: block;
+        padding: 22px 0;
+    }
+    &-type{
+        width: 100%;
+        max-width: 68px;
+        & .table-cell{
+            height: 24px;
+        }
+        & .type-bug{
+            background-size: 24px 24px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-image: url("../../img/error.svg");
+        }
+        & .type-task{
+            background-size: 24px 24px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-image: url("../../img/task.svg");
+        }
+    }
+    &-edit{
+        width: 100%;
+        max-width: 95px;
+        position: relative;
+        
+        & .table-cell{
+            width: 100%;
+            background-color: transparent;
+            border: none;
+            background-repeat: no-repeat;
+            background-size: 20px 20px;
+            background-position: right;
+            background-image: url("../../img/burger.svg");
+        }
+        &-open.table-cell{
+            background-image: url("../../img/burger-open.svg");
+        }
+    }
+    &-name-task{
+        width: 100%;
+        max-width: 527px;
+    }
+    &-users{
+        width: 100%;
+        max-width:180px;
+    }
+    &-priority{
+        max-width: 120px;
+        width: 100%;
+        & .table-cell{
+            position: relative;
+            padding-left: 30px;
+        }}
+        &-proirity-hight::after{
+            content: "";
+            top: 6px;
+            left: 12px;
+            width: 14px;
+            height: 8px;
+            position: absolute;
+            box-sizing: border-box;
+            background-image: url("../../img/hight.svg");
+            background-repeat: no-repeat;
+        }
+        &-proirity-medium::after{
+            content: "";
+            top: 7px;
+            left: 12px;
+            width: 14px;
+            height: 6px;
+            position: absolute;
+            box-sizing: border-box;
+            background-image: url("../../img/medium.svg");
+            background-repeat: no-repeat;
+        }
+        &-proirity-low::after{
+            content: "";
+            top: 6px;
+            left: 12px;
+            width: 14px;
+            height: 8px;
+            position: absolute;
+            box-sizing: border-box;
+            background-image: url("../../img/low.svg");
+            background-repeat: no-repeat;
+        }
+    &-status{
+        width: 100%;
+        max-width: 120px;
+        &-button{
+            height: 19px;
+            border-radius: 5px;
+            box-sizing: border-box;
+            padding: 0 10px;
+            margin-top: 5px;
+            @include font('Roboto', 13px, 16px, 400, $text);
+        }
+        &-opened{
+            border: 1px solid $text;
+            background-color: $label-text;
+        }
+        &-inProgress{
+            border: 1px solid #846F00;
+            background-color: #FFC700;
+            color: #846F00;
+        }
+        &-complete{
+            border: 1px solid #157536;
+            color: #157536;
+            background-color: #4BD379;
+        }
+        &-error{
+            border: 1px solid #EB4F4F;
+            color: #6D1313;
+            border-color: #6D1313;
+        }
+    }    
+}
+

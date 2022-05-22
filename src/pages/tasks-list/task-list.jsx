@@ -5,30 +5,39 @@ import TaskListBoard from "../../components/task-list-board/task-list-board";
 import TaskListForm from "../../components/task-list-form/task-list-form";
 import {observer} from "mobx-react";
 import Pagination from "../../components/pagination/pagination";
-import { useState } from "react";
-import {tasks} from "../../store/index.js" ;
+import { users } from "../../store/users";
+import { tasks } from "../../store/tasks";
+
 
 const TaskList = observer(()=>{
-    const total = tasks.allData.length
-    const [currentPage, setCurrentPage] = useState(0)
-    const userPerPage = 10
-    const pages = Math.floor(total/userPerPage)
-    tasks.taskFilter.page = currentPage
-    tasks.taskFilter.limit = userPerPage
-    tasks.getFilterTasks(tasks.taskFilter)
+    async function fetch (){
+        await users.users()
+        await tasks.filterTasks(tasks.taskFilter)
+        await users.login(users.userLoginData)
     
-    
+    }
+        fetch()
     return(
         <>
             <Header/>
             <section className="board">
                 <CardHeader/>
-                <TaskListForm/>
+                <TaskListForm />
                 <TaskListBoard/>
-                <Pagination currentPage = {currentPage} setCurrentPage = {setCurrentPage} total = {total} userPerPage={userPerPage} pages = {pages} />
+                <Pagination />
             </section>
         </>
     )
 });
 
 export default TaskList
+
+/*
+
+
+    useEffect(()=>{
+        users.users()
+        tasks.filterTasks(tasks.taskFilter)
+        users.login(users.userLoginData)
+    })
+    */

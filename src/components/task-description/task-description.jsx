@@ -1,12 +1,56 @@
 import React from "react";
-import { tasks } from "../../store";
+import moment from "moment";
+import {tasks} from "../../store/tasks"
+import { observer} from "mobx-react";
+import { comments } from "../../store/comment";
+import { users } from "../../store/users";
 
-
-const TaskDescription = () =>{
-    const handlerShow=(e)=>{
-        e.preventDefault()
-        e.target.parentElement.classList.toggle("show");
+function Comment ({text, userId, authorCommentId, commentId, id}){
+    const getUserById= (number)=>{
+        let text
+        if (users.allUsers.find(user => user.id === number) === undefined) {
+            return text = "Не задан"
+        } else {
+            text = users.allUsers.find(user => user.id === number).username
+            return text
+        }
     }
+    
+    async function handelerDeleteComment (){
+        await comments.deleteComment(commentId)
+        await comments.comments(id)
+    }
+    const authorComment = getUserById(userId)
+    return(
+        <>
+            <li className="task-comment_item">
+                <div>
+                    <p className="task-information_title">{authorComment}</p>
+                    <p className="task-information_text">{text}</p>
+                </div>
+                {(userId === authorCommentId)
+                    && <p className="task-information_text task-information_delete"  onClick={handelerDeleteComment}>Удалить</p>
+                }
+            </li>
+        </>
+    )
+}
+
+const TaskDescription = observer(({id}) =>{
+    const {rank, description, dateOfCreation, dateOfUpdate, timeInMinutes, type, userId, assignedId} = tasks.task
+    const getUserById= (number)=>{
+        let text
+        if (users.allUsers.find(user => user.id === number) === undefined) {
+            return text = "Не задан"
+        } else {
+            text = users.allUsers.find(user => user.id === number).username
+            return text
+        }
+    }
+    let author = getUserById(userId)
+    let executor = getUserById(assignedId)
+
+
     const handlerCloseModal = (e)=>{
         e.preventDefault()
         const modal = document.querySelector(".notion-work")
@@ -16,23 +60,7 @@ const TaskDescription = () =>{
         const modal = document.querySelector(".notion-work")
         modal.classList.toggle("notion-work_show");
     }
-    let text = "Выберите единицу измерения"
-    const handelChange = (e)=>{
-        const id = e.target.id;
-        
-        if (id === "minute") {
-            text = "Минут";
-        } else if (id === "hour") {
-            text = "Часов";
-        } else if (id === "day") {
-            text = "Дней";
-        }
-        document.querySelector(".dropdown_btn").textContent=text;
-    }
-    const {rank, dateOfCreation, dateOfUpdate, title, type, userId, assignedId} = tasks.oneTask
-    const author = tasks.allUsers.find(user => user.id === userId).username
-    const executor = tasks.allUsers.find(user => user.id === assignedId).username
-    console.log(dateOfCreation, dateOfUpdate, title);
+    
     let taskType = ""
     if (type === 'task') {
         taskType = "Задача"
@@ -46,6 +74,117 @@ const TaskDescription = () =>{
         rankTask = "Средний"
     } else if (rank === "low") {
         rankTask = "Низкий"
+    }
+    const dateCreation = moment(dateOfCreation).format("DD.MM.YYYY HH:mm")
+    const dateUpdates = moment(dateOfUpdate).format("DD.MM.YYYY HH:mm")
+    
+    const {allComments} = comments
+    const totalComment = allComments.length
+    const authorCommentId = users.userData.id
+
+    const handleAddComment = (evt)=>{
+        const {value} = evt.target
+        comments.comentData.text = value
+    }
+    async function handleSubmit (e){
+        e.preventDefault();
+        comments.comentData.taskId = id
+        comments.comentData.userId = authorCommentId
+        comments.comentData.dateOfCreation = dateOfCreation
+        await comments.createEditComment(comments.comentData)
+        await comments.comments(id)
+    }
+
+
+    const openSelect = (e)=>{
+        const options = e.target.childNodes
+        e.target.classList.toggle("select-open")
+        for (let i = 1; i < options.length; i++) {
+            const element = options[i];
+            element.classList.toggle("option-show")
+        }
+    }
+    const openSelectByOption = (e)=>{
+        const parentSelect = e.target.parentElement
+        parentSelect.classList.toggle("select-open")
+        const options = parentSelect.childNodes
+        for (let i = 1; i < options.length; i++) {
+            const element = options[i];
+            element.classList.toggle("option-show")
+        }
+    }
+    let unit
+    let time
+    const handlerOption = (e)=>{
+        const parentSelect = e.target.parentElement
+        parentSelect.classList.toggle("select-open")
+        const options = parentSelect.childNodes
+        for (let i = 1; i < options.length; i++) {
+            const element = options[i];
+            element.classList.toggle("option-show")
+        }
+        const defaultOption = parentSelect.querySelector(".select-default")
+        defaultOption.textContent = e.target.textContent
+        unit = e.target.id
+    }
+    const handlerCommentWork = (e)=>{
+        tasks.workTime.comment = e.target.value
+    }
+    const handlerTimeWork = (e)=>{
+        time = e.target.value
+    }
+        let textMin
+        let min = timeInMinutes % 60 | 0
+        let textHours
+        let hours = timeInMinutes/60 | 0
+        let textDays
+        let days = 0
+        if (hours > 24){
+            days = Math.floor(hours/24)
+            hours = hours -24
+        }
+        if (min === 1) {
+            textMin = "минута"
+        } else {
+            textMin = "минут"
+        }
+        if (hours === 1) {
+            textHours = "час"
+        }
+        if (hours >= 2 && hours <5) {
+            textHours = "часа"
+        }
+        if (hours >= 5 || hours === 0){
+            textHours = "часов"
+        }
+        if (days === 1) {
+            textDays = "день"
+        } 
+        if (days >= 2 && days <5) {
+            textDays = "дня"
+        }
+        if (days >= 5 || days === 0){
+            textDays = "дней"
+        }
+    
+    async function handlerWorkTime (e){
+        e.preventDefault()
+        let allTime
+        if (unit === "hour") {
+            allTime = time * 60
+        }
+        if (unit === "day") {
+            allTime = time * 60 * 24
+
+        }
+        if (unit === "minute") {
+            allTime = time
+        }
+        tasks.workTime.timeInMinutes = allTime
+        tasks.workTime.currentUser = authorCommentId
+        console.log(tasks.workTime);
+        await tasks.workTimeTask(id, tasks.workTime)
+        await tasks.oneTask(id)
     }
     return(
         <>
@@ -70,44 +209,36 @@ const TaskDescription = () =>{
                     </li>
                     <li className="task-about_item">
                         <p className="task-information_title">Дата создания</p>
-                        <p className="task-information_text">01.09.2768</p>
+                        <p className="task-information_text">{dateCreation}</p>
                     </li>
                     <li className="task-about_item">
                         <p className="task-information_title">Дата изменения</p>
-                        <p className="task-information_text">0108 85</p>
+                        <p className="task-information_text">{dateUpdates}</p>
                     </li>
                     <li className="task-about_item">
                         <p className="task-information_title">Затрачено времени</p>
-                        <p className="task-information_text">0 минут 0 секунд</p>
+                        <p className="task-information_text">{`${days} ${textDays}, ${hours} ${textHours}, ${min} ${textMin}`}</p>
                     </li>
                 </ul>
                 <button className="task-about_button button button_primary" onClick={handlerOpenModal}>Сделать запись о работе</button>
             </div>
-            <p className="task-information_divide"></p>
             <div className="task-description">
                 <p className="task-information_title">Описание</p>
                 <p className="task-information_text">
-                    Какой-то текст задачи, например, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean imperdiet consectetur dolor, nec consectetur nisl mattis ut. Proin ac sapien at elit lacinia semper. Nullam vestibulum rutrum efficitur. Sed et egestas ante, id ullamcorper ante. Maecenas porta sem ultrices libero tempus, eu laoreet turpis bibendum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed laoreet est et nisi tristique, ut hendrerit tellus pulvinar. Proin eget elit a mauris convallis molestie nec vel nisi. Etiam accumsan porta velit et convallis. Maecenas euismod scelerisque lectus, non varius velit condimentum non. Vestibulum luctus risus et metus volutpat, at sodales massa gravida.
+                {description}
                 </p>
             </div>
-            <p className="task-information_divide"></p>
             <div className="task-comment">
-                <form action="" className="task-comment-form">
-                    <label htmlFor="comment" className="task-information_title">Комментарии(1)</label>
-                    <textarea type="text" id="comment" className="input task-comment_input" placeholder="Текст комментария" />
+                <form action="" className="task-comment-form" onSubmit={handleSubmit}>
+                    <label htmlFor="comment" className="task-information_title">Комментарии({totalComment})</label>
+                    <textarea type="text" id="comment" name ="text" className="input task-comment_input" onChange={handleAddComment} placeholder="Текст комментария" />
                     <button type="submit" className="button button_success task-comment_button">Добавить комментарий</button>
                 </form>
                 <ul className="task-comment_list">
-                    <li className="task-comment_item">
-                        <p className="task-information_title">Шерлок (10190289)</p>
-                        <p className="task-information_text">фыфыфыф</p>
-                    </li>
-                    <li className="task-comment_item">
-                        <p className="task-information_title">Ватсон (87282)</p>
-                        <p className="task-information_text">самый</p>
-                    </li>
+                    {allComments.map(allComments =><Comment {...allComments} id={id} commentId={allComments.id} authorCommentId={authorCommentId} key={allComments.id} text={allComments.text} userId={allComments.userId}/>)}
                 </ul>
             </div>
+            
         </section>
         <section className="notion-work">
             <div className="notion-work_wrapper">
@@ -116,42 +247,31 @@ const TaskDescription = () =>{
                     <ul className="notion-work_list">
                         <li className="notion-work_item">
                             <label className="task-information_title" htmlFor="time">Затраченное время</label>
-                            <input className="notion-work_input input" type="text" />
+                            <input className="notion-work_input input" type="text" onChange={handlerTimeWork}/>
                         </li>
-                        <li className="notion-work_item">
-                            <button className="dropdown_btn" onClick={handlerShow}>
-                               {text}
-                            </button>
-                                <ul className="dropdown_content">
-                                    <li  className="dropdown_item">
-                                        <label htmlFor="day" className="notion-work_label">Дней</label>
-                                        <input type="checkbox" name="" id="day" className="visually-hidden" onChange={handelChange}/>
-                                    </li>
-                                    <li  className="dropdown_item">
-                                        <label htmlFor="hour" className="notion-work_label"> Часов</label>
-                                        <input type="checkbox" name="" id="hour" className="visually-hidden" onChange={handelChange}/>
-                                    </li>
-                                    <li  className="dropdown_item">
-                                        <label htmlFor="minute" className="notion-work_label">Минут</label>
-                                        <input type="checkbox" name="" id="minute" className="visually-hidden" onChange={handelChange}/>
-                                    </li>
-                                </ul>
+                        <li className="task-about_item">
+                            <p className="task-information_title">Единица измерения</p>
+                            <div name="time" id="time" className="select " onClick={openSelect}>
+                                <p className="select-default select-text" onClick={openSelectByOption}>Выберите единицу измерения</p>
+                                <p className="select-option select-text" id="day" onClick={handlerOption}>Дни</p>
+                                <p className="select-option select-text" id="hour" onClick={handlerOption}>Часы</p>
+                                <p className="select-option select-text" id="minute" onClick={handlerOption}>Минуты</p>
+                            </div>
                         </li>
                         <li className="notion-work_item">
                             <label htmlFor="work-comment" className="task-information_title">Комментарий</label>
-                            <textarea id="work-comment" className="input task-comment_input" placeholder="placehoder"></textarea>
+                            <textarea id="work-comment" className="input task-comment_input" placeholder="placehoder" onChange={handlerCommentWork}></textarea>
                         </li>
                     </ul>
                 </form>
                 <div className="buttons-wrapper">
-                    <button type="submit" className="button button_primary notion-work_button">Добавить</button>
+                    <button type="submit" className="button button_primary notion-work_button" onClick={handlerWorkTime}>Добавить</button>
                     <button type="reset" onClick={handlerCloseModal} className="button notion-work_button">Отмена</button>
                 </div>
             </div>
         </section>
         </>
     )
-};
+});
 
 export default TaskDescription
-    

@@ -1,17 +1,17 @@
 import React from "react";
-import { tasks } from "../../store";
+import { tasks } from "../../store/tasks";
 import {observer} from "mobx-react";
 import TaskItem from "../task-item/task-item";
 
 const TaskListBoard = observer(()=>{
     const {filterData} = tasks
-
     return(
         <>
-        <section className="table">
+        <section className="table-wrapper">
             <table className="table">
                 <tbody>
-                    {filterData.map(filterData => <TaskItem {...filterData} key={filterData.id} />)}
+                    {filterData.data &&
+                    filterData.data.map(filterData => <TaskItem {...filterData} key={filterData.id} />)}
                 </tbody>
             </table>
         </section>

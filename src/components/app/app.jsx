@@ -18,6 +18,7 @@ export default function App() {
         <Route path={`${AppLinks.TASK}:id`} element={<Task/>}/>
         <Route path={`${AppLinks.TASKEDIT}:id`} element={<TaskEdit/>}/>
         <Route path={AppLinks.USERS} element={<Users/>}/>
+        <Route path={`${AppLinks.TASKADD}`} element={<TaskEdit/>}/>
       </Routes>
     </BrowserRouter>
   );

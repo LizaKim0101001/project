@@ -1,19 +1,21 @@
 .pagination{
-    display: flex;
+    margin-top: 20px;
+    @include flex(flex, row, space-between, center, no-wrap);
     width: 100%;
     &_button{
-        width: 234px;
+        width: 50%;
         height: 24px;
-        @include flex(flex, row, space-between, center, no-wrap);
+        @include flex(flex, row, normal, center, no-wrap);
     }
     &_item{
         padding: 2.5px 7.5px;
+        margin-right: 5px;
         &__next{
+            margin-right: 5px;
             padding: 2.5px 10px;
         }
     }
     &_shown{
-        width: 140px;
         @include font("Roboto", 14px, 16px, 400, $inner-shadow);
     }
 }

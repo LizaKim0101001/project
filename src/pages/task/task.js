@@ -2,15 +2,22 @@ import React from "react";
 import Header from "../../components/header/header";
 import CardHeader from "../../components/card-header/card-header";
 import TaskDescription from "../../components/task-description/task-description";
-import {observer} from "mobx-react";
-import {tasks} from "../../store/index"
+import {tasks} from "../../store/tasks"
 import { useParams} from "react-router-dom";
+import {observer} from "mobx-react";
+import { comments } from "../../store/comment";
+import { users } from "../../store/users";
 
 const Task = observer(()=>{
-    const {id} = useParams()
-    tasks.getOneTask(id);
     const edit = false;
-
+    const {id} = useParams()
+    async function fetch() {
+        await tasks.oneTask(id);
+        await comments.comments(id)
+        await users.users()
+        await users.login(users.userLoginData)
+    }
+        fetch()
     return(
         <>
             <Header/>
@@ -22,3 +29,8 @@ const Task = observer(()=>{
     )
 })
 export default Task
+
+/*
+    
+
+*/
